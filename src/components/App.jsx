@@ -15,9 +15,11 @@ const Wrapper = styled.section`
   padding: 4em;
 }
 ::after{
-  content: 'asedfaef';
+  content: 'Ivan Somau production';
   font-size: 10px;
   position: absolute;
+  top: 0;
+  left: 20%;
 }
 `;
 
@@ -27,7 +29,8 @@ class App extends Component {
   render() {
     return (
     <Wrapper>
-      <Title>Hello World, this is my first styled component!</Title>
+      <Title>Converter is not working yet
+        <br/> :'|</Title>
     </Wrapper>
     );
   }
