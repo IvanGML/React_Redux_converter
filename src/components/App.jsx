@@ -1,105 +1,93 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
-
-const Title = styled.h1`
-  font-size: 1.5em;
-  text-align: center;
-  color: maroon;
-`;
-
-
-const Wrapper = styled.section`
-{
-  background: papayawhip;
-  padding: 4em;
-  min-height: 100vh;
-}
-`;
-
-const Input = styled.input`
-&:read-only{
-  background-color: #efefef;
-}
-{
-  margin: 20px 0 20px 20px;
-  display: block;
-  width: 300px;
-  font-family: sans-serif;
-  font-size: 18px;
-  appearance: none;
-  border-radius: none;
-  transition: border 0.3s;
-  outline: none;
-  padding: 10px;
-  padding-top: 11px;
-  transition: 0.3s;
-  border: none;
-  border-bottom: solid 2px #c9c9c9;
-}
-&:focus{
-  border-bottom: solid 2px #969696;
-}
-`
-
-const FlexContainer = styled.div`
-  {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-`;
-
-const Select = styled.select`
-  margin: 20px 20px 20px 0;
-  display: block;
-  font-family: sans-serif;
-  font-size: 18px;
-  appearance: none;
-  border-radius: none;
-  transition: border 0.3s;
-  outline: none;
-  padding: 10px;
-  transition: 0.3s;
-  border: none;
-  border-bottom: solid 2px #c9c9c9;
-`
-
+  import {Title, Wrapper, Input, FlexContainer, Select} from './styled';
 
 
 class App extends Component {
-  
+  // very vad method :-\
+  typeOfMeasurement(){
+    this.outputValue.value = '';
+    console.log(this.typeOfMeasurementValue.value);
+    if(this.typeOfMeasurementValue.value === 'Custom'){
+      this.customRateInput.style.display = 'block';
+      this.selectFROM.style.display = 'none'
+      this.selectTO.style.display = 'none'
+      this.specifiedMeasSelect.style.display = 'none'
+    } else if (this.typeOfMeasurementValue.value === 'Specified'){
+      this.selectFROM.style.display = 'block'
+      this.selectTO.style.display = 'block'
+      this.specifiedMeasSelect.style.display = 'block'
+      this.customRateInput.style.display = 'none';
+    } else {
+      this.selectFROM.style.display = 'none'
+      this.customRateInput.style.display = 'none';
+      this.selectTO.style.display = 'none'
+      this.specifiedMeasSelect.style.display = 'none'
+    }
+  }
+  onChangeCustom(){
+    this.props.cusotomToStore(this.customRateInput.value);
+
+  }
+  onChangeInitial(){
+    this.props.initialValueToStore(this.initialValue.value)
+  }
+  componentDidUpdate(){
+    let initial = this.props.globalStore.INITIAL_VALUE_TO_STORE;
+    let custom = this.props.globalStore.CUSTOM_VALUE_TO_STORE;
+    let selectVal = this.typeOfMeasurementValue.value;
+
+    if(initial !== '' && custom !== '' && selectVal === 'Custom'){
+      this.outputValue.value = custom * initial;
+    }
+  }
   render() {
     return (
     <Wrapper>
       <Title>Converter is not working yet :'|</Title>
         <FlexContainer>
-          <Input type='number' placeholder='Put in'></Input>
-          <Select>
+          <Input 
+          type='number' 
+          placeholder='Put in'
+          innerRef={(select)=>{this.initialValue = select}}
+          onInput={this.onChangeInitial.bind(this)}></Input>
+          <Select innerRef={(select)=>{this.selectFROM = select}} style={{display: 'none'}}>
             <option>one</option>
             <option>two</option>
             <option>three</option>
           </Select>
         </FlexContainer>
         <FlexContainer>
-          <Input type='text' readOnly placeholder='Put out'></Input>
-          <Select>
+          <Input 
+          type='text' 
+          readOnly 
+          innerRef={(input)=>{this.outputValue = input}}
+          placeholder='Put out'></Input>
+          <Select innerRef={(select)=>{this.selectTO = select}} style={{display: 'none'}}>
             <option>one</option>
             <option>two</option>
             <option>three</option>
           </Select>
         </FlexContainer>
-        <FlexContainer>
+        <FlexContainer className='rateDiv'>
           <span>Rate</span>
-          <Select>
-            <option>one</option>
-            <option>two</option>
-            <option>three</option>
+          <Input 
+          type='number' 
+          placeholder='Custom rate' 
+          innerRef={(input)=>{this.customRateInput = input}} 
+          style={{display: 'none'}}
+          onInput={this.onChangeCustom.bind(this)}></Input>
+          <Select innerRef={(thisSelect)=>{this.specifiedMeasSelect = thisSelect}} style={{display: 'none'}}>
+            <option value='Weight'>Weight</option>
+            <option value='Length'>Length</option>
+            <option value='Temperature'>Temperature</option>
           </Select>
-          <Select>
-            <option>one</option>
-            <option>two</option>
-            <option>three</option>
+          <Select 
+            onChange={this.typeOfMeasurement.bind(this)}
+            innerRef={(select)=>{this.typeOfMeasurementValue = select}}>
+            <option value='Chose type of measurement'>Chose type of measurement</option>
+            <option value='Custom'>Custom</option>
+            <option value='Specified'>Specified</option>
           </Select>
         </FlexContainer>
         
@@ -112,5 +100,12 @@ export default connect(
   state => ({
     globalStore: state
   }),
-  dispatch => ({})
+  dispatch => ({
+    cusotomToStore: (value) => {
+      dispatch({ type: 'CUSTOM_VALUE_TO_STORE', payload: value});
+    },
+    initialValueToStore: (value) => {
+      dispatch({ type: 'INITIAL_VALUE_TO_STORE', payload: value});
+    }
+  })
 )(App);
