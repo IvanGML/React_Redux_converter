@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-  import {Title, Wrapper, Input, FlexContainer, Select} from './styled';
-
+import {Title, Wrapper, Input, FlexContainer, Select} from './styled';
+import {Weight, Length, Temperature} from '../data/measurements.js'
+import {data, converter} from '../data/businessLogic.js'
 
 class App extends Component {
-  // very vad method :-\
+  // very bad method :-\
   typeOfMeasurement(){
     this.outputValue.value = '';
-    console.log(this.typeOfMeasurementValue.value);
     if(this.typeOfMeasurementValue.value === 'Custom'){
       this.customRateInput.style.display = 'block';
       this.selectFROM.style.display = 'none'
@@ -27,7 +27,6 @@ class App extends Component {
   }
   onChangeCustom(){
     this.props.cusotomToStore(this.customRateInput.value);
-
   }
   onChangeInitial(){
     this.props.initialValueToStore(this.initialValue.value)
@@ -36,12 +35,26 @@ class App extends Component {
     let initial = this.props.globalStore.INITIAL_VALUE_TO_STORE;
     let custom = this.props.globalStore.CUSTOM_VALUE_TO_STORE;
     let selectVal = this.typeOfMeasurementValue.value;
-
     if(initial !== '' && custom !== '' && selectVal === 'Custom'){
       this.outputValue.value = custom * initial;
     }
+    if(initial !== '' && selectVal === 'Specified'){
+      this.outputValue.value = converter([this.initialValue.value, this.selectFROM.value, this.selectTO.value], data)
+    }
+  }
+  changeTypeOfSpecified(){
+    if(this.specifiedMeasSelect.value === 'Weight'){this.props.changeTypesOfMeas(Weight)}
+    if(this.specifiedMeasSelect.value === 'Length'){this.props.changeTypesOfMeas(Length)}
+    if(this.specifiedMeasSelect.value === 'Temperature'){this.props.changeTypesOfMeas(Temperature)}
+  }
+  changeFromM(){
+    this.outputValue.value = converter([this.initialValue.value, this.selectFROM.value, this.selectTO.value], data)
+  }
+  changeToM(){
+    this.outputValue.value = converter([this.initialValue.value, this.selectFROM.value, this.selectTO.value], data)
   }
   render() {
+    
     return (
     <Wrapper>
       <Title>Converter is not working yet :'|</Title>
@@ -51,10 +64,11 @@ class App extends Component {
           placeholder='Put in'
           innerRef={(select)=>{this.initialValue = select}}
           onInput={this.onChangeInitial.bind(this)}></Input>
-          <Select innerRef={(select)=>{this.selectFROM = select}} style={{display: 'none'}}>
-            <option>one</option>
-            <option>two</option>
-            <option>three</option>
+          <Select 
+            innerRef={(select)=>{this.selectFROM = select}}
+            onChange={this.changeFromM.bind(this)} 
+            style={{display: 'none'}}>
+            {this.props.globalStore.MEASUREMENTS.map((item, index)=>( <option key={index} value={item}>{item}</option> ))}
           </Select>
         </FlexContainer>
         <FlexContainer>
@@ -62,11 +76,12 @@ class App extends Component {
           type='text' 
           readOnly 
           innerRef={(input)=>{this.outputValue = input}}
-          placeholder='Put out'></Input>
-          <Select innerRef={(select)=>{this.selectTO = select}} style={{display: 'none'}}>
-            <option>one</option>
-            <option>two</option>
-            <option>three</option>
+          placeholder='Result'></Input>
+          <Select 
+            innerRef={(select)=>{this.selectTO = select}}
+            onChange={this.changeToM.bind(this)} 
+            style={{display: 'none'}}>
+            {this.props.globalStore.MEASUREMENTS.map((item, index)=>( <option key={index} value={item}>{item}</option> ))}
           </Select>
         </FlexContainer>
         <FlexContainer className='rateDiv'>
@@ -77,7 +92,10 @@ class App extends Component {
           innerRef={(input)=>{this.customRateInput = input}} 
           style={{display: 'none'}}
           onInput={this.onChangeCustom.bind(this)}></Input>
-          <Select innerRef={(thisSelect)=>{this.specifiedMeasSelect = thisSelect}} style={{display: 'none'}}>
+          <Select 
+            innerRef={(thisSelect)=>{this.specifiedMeasSelect = thisSelect}} 
+            onChange={this.changeTypeOfSpecified.bind(this)}
+            style={{display: 'none'}}>
             <option value='Weight'>Weight</option>
             <option value='Length'>Length</option>
             <option value='Temperature'>Temperature</option>
@@ -90,7 +108,6 @@ class App extends Component {
             <option value='Specified'>Specified</option>
           </Select>
         </FlexContainer>
-        
     </Wrapper>
     );
   }
@@ -106,6 +123,9 @@ export default connect(
     },
     initialValueToStore: (value) => {
       dispatch({ type: 'INITIAL_VALUE_TO_STORE', payload: value});
+    },
+    changeTypesOfMeas: (value) => {
+      dispatch({ type: 'MEASUREMENTS', payload: value});
     }
   })
 )(App);

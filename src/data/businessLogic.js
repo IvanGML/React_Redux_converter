@@ -1,4 +1,4 @@
-let data = [
+export let data = [
   {
     name: 'mm',
     index: 1
@@ -20,10 +20,7 @@ let data = [
   }
 ]
 
-let array = [15,'m','mm'];
-
-
-let converter = (inputData, data) => {
+export let converter = (inputData, data) => {
   let convertFrom = 0;
   let convertTo = 0;
   for (let i = 0; i < data.length; i++) {
@@ -38,7 +35,3 @@ let converter = (inputData, data) => {
   }
   return inputData[0] * convertFrom / convertTo;
 }
-
-
-
-console.log(converter(array, data));
