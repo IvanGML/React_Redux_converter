@@ -1,7 +1,7 @@
-const initialState = [];
+const initialState = ['g','kg','t'];
 
 export default function dispatch(state = initialState, action) {
-  if (action.type === 'CHANGE_TOM_TO') {
+  if (action.type === 'MEASUREMENTS') {
     return action.payload;
   }
   return state;
