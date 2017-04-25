@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {Title, Wrapper, Input, FlexContainer, Select} from './styled';
 import {Weight, Length, Temperature} from '../data/measurements.js'
-import {data, converter} from '../data/businessLogic.js'
+import {data, converter, tempConverter} from '../data/businessLogic.js'
 
 class App extends Component {
   // very bad method :-\
@@ -31,16 +31,25 @@ class App extends Component {
   onChangeInitial(){
     this.props.initialValueToStore(this.initialValue.value)
   }
-  componentDidUpdate(){
+  businessLogicInit(){
     let initial = this.props.globalStore.INITIAL_VALUE_TO_STORE;
     let custom = this.props.globalStore.CUSTOM_VALUE_TO_STORE;
     let selectVal = this.typeOfMeasurementValue.value;
-    if(initial !== '' && custom !== '' && selectVal === 'Custom'){
-      this.outputValue.value = custom * initial;
+    if(this.specifiedMeasSelect.value !== 'Temperature'){
+      if(initial !== '' && custom !== '' && selectVal === 'Custom'){
+        this.outputValue.value = custom * initial;
+      }
+      if(initial !== '' && selectVal === 'Specified'){
+        this.outputValue.value = converter([this.initialValue.value, this.selectFROM.value, this.selectTO.value], data)
+      }
+    } else if(this.specifiedMeasSelect.value === 'Temperature') {
+      this.outputValue.value = tempConverter([this.initialValue.value, this.selectFROM.value, this.selectTO.value])
     }
-    if(initial !== '' && selectVal === 'Specified'){
-      this.outputValue.value = converter([this.initialValue.value, this.selectFROM.value, this.selectTO.value], data)
-    }
+  }
+  componentDidUpdate(){
+
+    console.log([this.initialValue.value, this.selectFROM.value, this.selectTO.value]);
+    this.businessLogicInit()
   }
   changeTypeOfSpecified(){
     if(this.specifiedMeasSelect.value === 'Weight'){this.props.changeTypesOfMeas(Weight)}
@@ -48,13 +57,14 @@ class App extends Component {
     if(this.specifiedMeasSelect.value === 'Temperature'){this.props.changeTypesOfMeas(Temperature)}
   }
   changeFromM(){
-    this.outputValue.value = converter([this.initialValue.value, this.selectFROM.value, this.selectTO.value], data)
+    this.businessLogicInit()
+    console.log([this.initialValue.value, this.selectFROM.value, this.selectTO.value]);
   }
   changeToM(){
-    this.outputValue.value = converter([this.initialValue.value, this.selectFROM.value, this.selectTO.value], data)
+    this.businessLogicInit()
+    console.log([this.initialValue.value, this.selectFROM.value, this.selectTO.value]);
   }
   render() {
-    
     return (
     <Wrapper>
       <Title>Converter is not working yet :'|</Title>

@@ -1,5 +1,5 @@
 export let data = [
-  {
+  { 
     name: 'mm',
     index: 1
   }, {
@@ -34,4 +34,16 @@ export let converter = (inputData, data) => {
     }
   }
   return inputData[0] * convertFrom / convertTo;
+}
+
+export let tempConverter = (inputData) => {
+  if(inputData[1] !== inputData[2]){
+    if (inputData[1] === 'c'){
+      return  (1.8 * inputData[0]) + 32;
+    } else {
+      return (inputData[0] - 32) / 1.8;
+    }
+  } else {
+    return inputData[0];
+  }
 }
