@@ -67,7 +67,7 @@ class App extends Component {
   render() {
     return (
     <Wrapper>
-      <Title>Converter is not working yet :'|</Title>
+      <Title>Converter is working now ^_^</Title>
         <FlexContainer>
           <Input 
           type='number' 
