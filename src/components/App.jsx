@@ -96,6 +96,13 @@ class App extends Component {
         </FlexContainer>
         <FlexContainer className='rateDiv'>
           <span>Rate</span>
+          <Select 
+            onChange={this.typeOfMeasurement.bind(this)}
+            innerRef={(select)=>{this.typeOfMeasurementValue = select}}>
+            <option value='Chose type of measurement'>Chose type of measurement</option>
+            <option value='Custom'>Custom</option>
+            <option value='Specified'>Specified</option>
+          </Select>
           <Input 
           type='number' 
           placeholder='Custom rate' 
@@ -109,13 +116,6 @@ class App extends Component {
             <option value='Weight'>Weight</option>
             <option value='Length'>Length</option>
             <option value='Temperature'>Temperature</option>
-          </Select>
-          <Select 
-            onChange={this.typeOfMeasurement.bind(this)}
-            innerRef={(select)=>{this.typeOfMeasurementValue = select}}>
-            <option value='Chose type of measurement'>Chose type of measurement</option>
-            <option value='Custom'>Custom</option>
-            <option value='Specified'>Specified</option>
           </Select>
         </FlexContainer>
     </Wrapper>

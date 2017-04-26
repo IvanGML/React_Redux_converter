@@ -3,14 +3,15 @@ import styled from 'styled-components';
 export const Title = styled.h1`
 {
   font-size: 1.5em;
-  text-align: center;
   color: maroon;
+  width: 60%;
+  margin: 20px auto;
 }
 `;
 
 export const Wrapper = styled.section`
 {
-  background: papayawhip;
+  background: #fafafa;
   padding: 4em;
   min-height: 100vh;
 }
@@ -21,7 +22,7 @@ export const Input = styled.input`
   background-color: #efefef;
 }
 {
-  margin: 20px 0 20px 20px;
+  margin: 20px 0;
   display: block;
   width: 300px;
   font-family: sans-serif;
@@ -49,11 +50,13 @@ export const FlexContainer = styled.div`
   width: 60%;
   margin: 0 auto;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
+  position: relative;
 }
-&.rateDiv{
-  justify-content: space-around;  
+&.rateDiv span{
+  position: absolute;
+  left: -50px;
 }
 `;
 
