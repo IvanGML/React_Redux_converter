@@ -4,7 +4,7 @@ export const Title = styled.h1`
 {
   font-size: 1.5em;
   color: maroon;
-  width: 60%;
+  width: 400px;
   margin: 20px auto;
 }
 `;
@@ -47,7 +47,7 @@ export const Input = styled.input`
 
 export const FlexContainer = styled.div`
 {
-  width: 60%;
+  width: 400px;
   margin: 0 auto;
   display: flex;
   justify-content: flex-start;
