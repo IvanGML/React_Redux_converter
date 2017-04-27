@@ -6,6 +6,7 @@ import {data, converter, tempConverter} from '../data/businessLogic.js'
 
 class App extends Component {
   // very bad method :-\
+  // test new dev branch
   typeOfMeasurement(){
     this.outputValue.value = '';
     if(this.typeOfMeasurementValue.value === 'Custom'){
